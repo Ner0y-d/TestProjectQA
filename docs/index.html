@@ -41,13 +41,14 @@ input,textarea,select{font-family:var(--font);font-size:15px}
 .hero-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .hero-buttons .btn{padding:12px 28px;font-size:16px;border-radius:var(--radius)}
 .features{max-width:900px;margin:0 auto;padding:0 40px 80px}
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 .feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:border-color .15s}
 .feature-card:hover{border-color:var(--border2)}
 .feature-icon{font-size:22px;margin-bottom:12px}
 .feature-card h3{font-size:15px;font-weight:600;margin-bottom:6px}
 .feature-card p{font-size:13px;color:var(--text2);line-height:1.5}
 .landing-footer{border-top:1px solid var(--border);padding:24px 40px;text-align:center;color:var(--text3);font-size:13px;background:var(--surface)}
+.app-footer{border-top:1px solid var(--border);padding:20px 24px;text-align:center;color:var(--text3);font-size:13px;background:var(--surface);flex-shrink:0}
 .auth-page{background:var(--bg);display:flex;flex-direction:column;min-height:100vh}
 .auth-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:1px solid var(--border);background:var(--surface)}
 .auth-body{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
@@ -106,6 +107,7 @@ input,textarea,select{font-family:var(--font);font-size:15px}
 .status-todo{background:var(--surface2);color:var(--text2);border:1px solid var(--border2)}
 .status-inprogress{background:var(--accent-bg);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
 .status-done{background:var(--success-bg);color:var(--success);border:1px solid color-mix(in srgb,var(--success) 25%,transparent)}
+.status-closed{background:var(--danger-bg);color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 25%,transparent)}
 .status-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px)}
 .modal-overlay.open{display:flex}
@@ -174,9 +176,9 @@ input,textarea,select{font-family:var(--font);font-size:15px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--text3)}
 [data-lang]{display:none}
-[data-lang].active{display:inline}
-@media(max-width:640px){.landing-nav{padding:16px 20px}.hero{padding:48px 20px 40px}.features{padding:0 20px 48px}.landing-footer{padding:20px}.app-main{padding:20px 16px}.app-header{padding:0 16px}.tasks-grid{grid-template-columns:1fr}.dashboard-header{flex-direction:column;align-items:flex-start}.form-row{grid-template-columns:1fr}.hero-buttons .btn{width:100%;justify-content:center}.auth-card{padding:24px}.modal-overlay{align-items:flex-end;padding:0}.modal{border-radius:var(--radius) var(--radius) 0 0;max-height:95vh}}
-@media(max-width:768px){.filter-btns{display:none}.nav-actions .btn-ghost{display:none}}
+[data-lang].active{display:revert}
+@media(max-width:640px){.landing-nav{padding:16px 20px}.nav-actions{gap:14px}.lang-select{padding:6px 8px}.hero{padding:48px 20px 40px}.features{padding:0 20px 48px}.features-grid{grid-template-columns:1fr}.landing-footer{padding:20px}.app-main{padding:20px 16px}.app-header{padding:0 16px}.tasks-grid{grid-template-columns:1fr}.dashboard-header{flex-direction:column;align-items:flex-start}.form-row{grid-template-columns:1fr}.hero-buttons .btn{width:100%;justify-content:center}.auth-card{padding:24px}.modal-overlay{align-items:flex-end;padding:0}.modal{border-radius:var(--radius) var(--radius) 0 0;max-height:95vh}}
+@media(max-width:768px){.filter-btns{display:none}}
 </style>
 </head>
 <body>
@@ -189,8 +191,6 @@ input,textarea,select{font-family:var(--font);font-size:15px}
   <div class="nav-actions">
     <select class="lang-select" id="lang-switcher" aria-label="Language"><option value="en">🇬🇧 EN</option><option value="de">🇩🇪 DE</option></select>
     <label class="theme-toggle" aria-label="Toggle dark mode"><div class="toggle-track" id="lt-track"><div class="toggle-thumb" id="lt-thumb">☀️</div></div></label>
-    <button class="btn btn-ghost" onclick="showPage('login')"><span data-lang="en" class="active">Sign in</span><span data-lang="de">Anmelden</span></button>
-    <button class="btn btn-primary" onclick="showPage('register')"><span data-lang="en" class="active">Get started</span><span data-lang="de">Loslegen</span></button>
   </div>
 </nav>
 <main>
@@ -220,7 +220,10 @@ input,textarea,select{font-family:var(--font);font-size:15px}
 <div class="page" id="page-login">
 <div class="auth-page">
   <nav class="auth-nav">
-    <div class="landing-logo" style="cursor:pointer" onclick="showPage('landing')"><div class="logo-dot"></div>TaskFlow</div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <button class="btn btn-ghost btn-sm" onclick="showPage('landing')" data-testid="login-back"><span data-lang="en" class="active">← Back</span><span data-lang="de">← Zurück</span></button>
+      <div class="landing-logo" style="cursor:pointer" onclick="showPage('landing')"><div class="logo-dot"></div>TaskFlow</div>
+    </div>
     <label class="theme-toggle" aria-label="Toggle dark mode"><div class="toggle-track" id="login-track"><div class="toggle-thumb" id="login-thumb">☀️</div></div></label>
   </nav>
   <div class="auth-body">
@@ -234,8 +237,11 @@ input,textarea,select{font-family:var(--font);font-size:15px}
         <div class="field-error" id="login-email-err">Please enter a valid email address.</div>
       </div>
       <div class="form-group">
-        <label for="login-password"><span data-lang="en" class="active">Password</span><span data-lang="de">Passwort</span></label>
-        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" data-testid="login-password">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <label for="login-password" style="margin-bottom:0"><span data-lang="en" class="active">Password</span><span data-lang="de">Passwort</span></label>
+          <a onclick="openForgotPassword()" style="font-size:13px;font-weight:500" data-testid="forgot-password-link"><span data-lang="en" class="active">Forgot password?</span><span data-lang="de">Passwort vergessen?</span></a>
+        </div>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" data-testid="login-password" style="margin-top:6px">
         <div class="field-error" id="login-pass-err">Password is required.</div>
       </div>
       <button class="btn btn-primary form-submit" onclick="handleLogin()" data-testid="login-submit"><span data-lang="en" class="active">Sign in</span><span data-lang="de">Anmelden</span></button>
@@ -249,7 +255,10 @@ input,textarea,select{font-family:var(--font);font-size:15px}
 <div class="page" id="page-register">
 <div class="auth-page">
   <nav class="auth-nav">
-    <div class="landing-logo" style="cursor:pointer" onclick="showPage('landing')"><div class="logo-dot"></div>TaskFlow</div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <button class="btn btn-ghost btn-sm" onclick="showPage('landing')" data-testid="register-back"><span data-lang="en" class="active">← Back</span><span data-lang="de">← Zurück</span></button>
+      <div class="landing-logo" style="cursor:pointer" onclick="showPage('landing')"><div class="logo-dot"></div>TaskFlow</div>
+    </div>
     <label class="theme-toggle" aria-label="Toggle dark mode"><div class="toggle-track" id="reg-track"><div class="toggle-thumb" id="reg-thumb">☀️</div></div></label>
   </nav>
   <div class="auth-body">
@@ -284,12 +293,35 @@ input,textarea,select{font-family:var(--font);font-size:15px}
 </div>
 </div>
 
+<!-- FORGOT PASSWORD -->
+<div class="modal-overlay" id="modal-forgot" onclick="closeForgotOnOverlay(event)">
+<div class="modal" style="max-width:420px" data-testid="forgot-password-modal">
+  <div class="modal-header">
+    <div class="modal-title-area"><div class="modal-title"><span data-lang="en" class="active">Reset your password</span><span data-lang="de">Passwort zurücksetzen</span></div></div>
+    <button class="modal-close" onclick="closeModal('modal-forgot')" aria-label="Close">✕</button>
+  </div>
+  <div class="modal-body">
+    <p style="font-size:14px;color:var(--text2);margin-bottom:16px"><span data-lang="en" class="active">Enter your email address and we'll send you a link to reset your password.</span><span data-lang="de">Gib deine E-Mail-Adresse ein, um einen Link zum Zurücksetzen zu erhalten.</span></p>
+    <div class="form-group">
+      <label for="forgot-email"><span data-lang="en" class="active">Email address</span><span data-lang="de">E-Mail-Adresse</span></label>
+      <input type="email" id="forgot-email" placeholder="you@example.com" autocomplete="email" data-testid="forgot-email">
+      <div class="field-error" id="forgot-email-err">Please enter a valid email address.</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeModal('modal-forgot')" data-testid="forgot-cancel"><span data-lang="en" class="active">Cancel</span><span data-lang="de">Abbrechen</span></button>
+    <button class="btn btn-primary" onclick="submitForgotPassword()" data-testid="forgot-submit"><span data-lang="en" class="active">Send reset link</span><span data-lang="de">Link senden</span></button>
+  </div>
+</div>
+</div>
+
 <!-- DASHBOARD -->
 <div class="page" id="page-dashboard">
 <div class="app-layout">
   <header class="app-header">
     <div class="app-header-left"><div class="app-logo"><div class="logo-dot"></div>TaskFlow</div></div>
     <div class="app-header-right">
+      <select class="lang-select" aria-label="Language" data-testid="dash-lang-switcher"><option value="en">🇬🇧 EN</option><option value="de">🇩🇪 DE</option></select>
       <label class="theme-toggle" aria-label="Toggle dark mode"><div class="toggle-track" id="dash-track"><div class="toggle-thumb" id="dash-thumb">☀️</div></div></label>
       <div class="dropdown">
         <div class="header-avatar" id="header-avatar" onclick="toggleDropdown()" data-testid="user-menu" aria-label="User menu"></div>
@@ -317,10 +349,12 @@ input,textarea,select{font-family:var(--font);font-size:15px}
         <button class="filter-btn" data-filter="todo" onclick="setFilter('todo')" data-testid="filter-todo">To Do</button>
         <button class="filter-btn" data-filter="inprogress" onclick="setFilter('inprogress')" data-testid="filter-inprogress">In Progress</button>
         <button class="filter-btn" data-filter="done" onclick="setFilter('done')" data-testid="filter-done">Done</button>
+        <button class="filter-btn" data-filter="closed" onclick="setFilter('closed')" data-testid="filter-closed">Closed</button>
       </div>
     </div>
     <div class="tasks-grid" id="tasks-grid"></div>
   </main>
+  <footer class="app-footer"><span data-lang="en" class="active">© 2025 TaskFlow — Built for QA practice</span><span data-lang="de">© 2025 TaskFlow — Für QA-Übungen erstellt</span></footer>
 </div>
 </div>
 
@@ -331,8 +365,12 @@ input,textarea,select{font-family:var(--font);font-size:15px}
     <div class="modal-title-area">
       <div class="modal-title" id="detail-title"></div>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px">
-        <select class="status-select" id="detail-status" onchange="updateDetailStatus()" data-testid="detail-status-select"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select>
-        <span style="color:var(--text3);font-size:12px;font-family:var(--mono)" id="detail-date"></span>
+        <select class="status-select" id="detail-status" onchange="updateDetailStatus()" data-testid="detail-status-select"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option><option value="closed">Closed</option></select>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--text3);font-family:var(--mono)">
+        <span id="detail-date"></span>
+        <span id="detail-updated"></span>
+        <span id="detail-deadline"></span>
       </div>
     </div>
     <button class="modal-close" onclick="closeModal('modal-detail')" aria-label="Close">✕</button>
@@ -362,15 +400,22 @@ input,textarea,select{font-family:var(--font);font-size:15px}
     <div class="form-group">
       <label for="tf-title"><span data-lang="en" class="active">Title</span><span data-lang="de">Titel</span> <span style="color:var(--danger)">*</span></label>
       <input type="text" id="tf-title" placeholder="Task title…" data-testid="task-title-input">
-      <div class="field-error" id="tf-title-err">Title is required.</div>
+      <div class="field-error" id="tf-title-err">Title must be at least 3 characters.</div>
     </div>
     <div class="form-group">
-      <label for="tf-desc"><span data-lang="en" class="active">Description</span><span data-lang="de">Beschreibung</span></label>
+      <label for="tf-desc"><span data-lang="en" class="active">Description</span><span data-lang="de">Beschreibung</span> <span style="color:var(--danger)">*</span></label>
       <textarea id="tf-desc" placeholder="What needs to be done?" data-testid="task-desc-input"></textarea>
+      <div class="field-error" id="tf-desc-err">Description must be at least 3 characters.</div>
     </div>
-    <div class="form-group">
-      <label for="tf-status"><span data-lang="en" class="active">Status</span><span data-lang="de">Status</span></label>
-      <select id="tf-status" data-testid="task-status-select"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="tf-status"><span data-lang="en" class="active">Status</span><span data-lang="de">Status</span></label>
+        <select id="tf-status" data-testid="task-status-select"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option><option value="closed">Closed</option></select>
+      </div>
+      <div class="form-group">
+        <label for="tf-deadline"><span data-lang="en" class="active">Deadline</span><span data-lang="de">Frist</span></label>
+        <input type="date" id="tf-deadline" data-testid="task-deadline-input">
+      </div>
     </div>
   </div>
   <div class="modal-footer">
@@ -454,11 +499,10 @@ applyTheme(theme);
 function applyLang(l){
   lang=l;localStorage.setItem('tf_lang',l);
   document.querySelectorAll('[data-lang]').forEach(el=>el.classList.toggle('active',el.dataset.lang===l));
-  const sel=document.getElementById('lang-switcher');if(sel)sel.value=l;
+  document.querySelectorAll('.lang-select').forEach(sel=>sel.value=l);
   const si=document.getElementById('search-input');if(si)si.placeholder=l==='de'?'Aufgaben suchen…':'Search tasks…';
 }
-const langSwitcher=document.getElementById('lang-switcher');
-if(langSwitcher)langSwitcher.addEventListener('change',e=>applyLang(e.target.value));
+document.querySelectorAll('.lang-select').forEach(sel=>sel.addEventListener('change',e=>applyLang(e.target.value)));
 applyLang(lang);
 
 function showPage(name){
@@ -507,12 +551,26 @@ function handleRegister(){
 
 function handleLogout(){clearSession();currentUser=null;showPage('landing');closeDropdown();}
 
+function openForgotPassword(){
+  document.getElementById('forgot-email').value=document.getElementById('login-email').value.trim();
+  document.getElementById('forgot-email-err').classList.remove('visible');
+  document.getElementById('forgot-email').classList.remove('error');
+  openModal('modal-forgot');
+}
+function closeForgotOnOverlay(e){if(e.target===document.getElementById('modal-forgot'))closeModal('modal-forgot');}
+function submitForgotPassword(){
+  const email=document.getElementById('forgot-email').value.trim();
+  if(!validateEmail(email)){document.getElementById('forgot-email-err').classList.add('visible');document.getElementById('forgot-email').classList.add('error');return;}
+  closeModal('modal-forgot');
+  showToast(lang==='de'?'Falls diese E-Mail existiert, wurde ein Link zum Zurücksetzen gesendet.':'If that email exists, a reset link has been sent.','success');
+}
+
 function seedSampleTasks(uid){
+  const now=new Date().toISOString();
   const tasks=[
-    {id:uid+'_1',title:'Set up project repository',description:'Initialize Git repo, configure .gitignore, and set up branch protection rules.',status:'done',createdAt:new Date(Date.now()-86400000*3).toISOString(),comments:[{id:'c1',author:'You',text:'Done — used GitHub Actions too.',createdAt:new Date().toISOString()}]},
-    {id:uid+'_2',title:'Write API documentation',description:'Document all REST endpoints with request/response examples and error codes.',status:'inprogress',createdAt:new Date(Date.now()-86400000*2).toISOString(),comments:[]},
-    {id:uid+'_3',title:'Fix login page validation',description:'Email field accepts invalid formats. Need to add proper regex validation and error messages.',status:'todo',createdAt:new Date(Date.now()-86400000).toISOString(),comments:[]},
-    {id:uid+'_4',title:'Performance audit',description:'Run Lighthouse audit and address any issues scoring below 90.',status:'todo',createdAt:new Date().toISOString(),comments:[]}
+    {id:uid+'_1',title:'Set up project repository',description:'Initialize Git repo and configure .gitignore.',status:'done',deadline:null,createdAt:new Date(Date.now()-86400000*3).toISOString(),updatedAt:now,comments:[{id:'c1',author:'You',text:'Done — used GitHub Actions too.',createdAt:now}]},
+    {id:uid+'_2',title:'Write API documentation',description:'Document all REST endpoints and error codes.',status:'inprogress',deadline:null,createdAt:new Date(Date.now()-86400000*2).toISOString(),updatedAt:now,comments:[]},
+    {id:uid+'_3',title:'Fix login page validation',description:'Email field accepts invalid formats.',status:'todo',deadline:null,createdAt:new Date(Date.now()-86400000).toISOString(),updatedAt:now,comments:[]}
   ];
   saveTasks(uid,tasks);
 }
@@ -554,12 +612,12 @@ function renderTasks(){
   grid.innerHTML=filtered.map(t=>taskCardHTML(t)).join('');
 }
 
-function statusLabel(s){return s==='todo'?'To Do':s==='inprogress'?'In Progress':'Done'}
-function statusClass(s){return s==='todo'?'status-todo':s==='inprogress'?'status-inprogress':'status-done'}
+function statusLabel(s){return s==='todo'?'To Do':s==='inprogress'?'In Progress':s==='closed'?'Closed':'Done'}
+function statusClass(s){return s==='todo'?'status-todo':s==='inprogress'?'status-inprogress':s==='closed'?'status-closed':'status-done'}
 
 function taskCardHTML(t){
-  const d=new Date(t.createdAt);
-  const dateStr=d.toLocaleDateString(lang==='de'?'de-DE':'en-GB',{day:'numeric',month:'short'});
+  const updatedStr=new Date(t.updatedAt||t.createdAt).toLocaleDateString(lang==='de'?'de-DE':'en-GB',{day:'numeric',month:'short'});
+  const updatedLabel=(lang==='de'?'Aktualisiert ':'Updated ')+updatedStr;
   return `<div class="task-card" onclick="openDetail('${t.id}')" data-testid="task-card" data-task-id="${t.id}" data-status="${t.status}">
     <div class="task-card-header">
       <div class="task-title">${escHtml(t.title)}</div>
@@ -571,7 +629,7 @@ function taskCardHTML(t){
     ${t.description?`<div class="task-desc">${escHtml(t.description)}</div>`:''}
     <div class="task-footer">
       <span class="status-badge ${statusClass(t.status)}"><span class="status-dot"></span>${statusLabel(t.status)}</span>
-      <div class="task-meta"><span class="task-date">${dateStr}</span><span class="comment-count">💬 ${(t.comments||[]).length}</span></div>
+      <div class="task-meta"><span class="task-date" data-testid="task-updated-date">${updatedLabel}</span><span class="comment-count">💬 ${(t.comments||[]).length}</span></div>
     </div>
   </div>`;
 }
@@ -582,8 +640,9 @@ function openCreateTask(){
   document.getElementById('tf-title').value='';
   document.getElementById('tf-desc').value='';
   document.getElementById('tf-status').value='todo';
-  document.getElementById('tf-title-err').classList.remove('visible');
-  document.getElementById('tf-title').classList.remove('error');
+  document.getElementById('tf-deadline').value='';
+  ['tf-title-err','tf-desc-err'].forEach(id=>document.getElementById(id).classList.remove('visible'));
+  ['tf-title','tf-desc'].forEach(id=>document.getElementById(id).classList.remove('error'));
   openModal('modal-task-form');
   setTimeout(()=>document.getElementById('tf-title').focus(),100);
 }
@@ -595,22 +654,32 @@ function openEditTask(id){
   document.getElementById('tf-title').value=t.title;
   document.getElementById('tf-desc').value=t.description||'';
   document.getElementById('tf-status').value=t.status;
-  document.getElementById('tf-title-err').classList.remove('visible');
+  document.getElementById('tf-deadline').value=t.deadline||'';
+  ['tf-title-err','tf-desc-err'].forEach(id=>document.getElementById(id).classList.remove('visible'));
+  ['tf-title','tf-desc'].forEach(id=>document.getElementById(id).classList.remove('error'));
   openModal('modal-task-form');
   setTimeout(()=>document.getElementById('tf-title').focus(),100);
 }
 
 function saveTask(){
   const title=document.getElementById('tf-title').value.trim();
-  if(!title){document.getElementById('tf-title-err').classList.add('visible');document.getElementById('tf-title').classList.add('error');return;}
-  document.getElementById('tf-title-err').classList.remove('visible');document.getElementById('tf-title').classList.remove('error');
+  const description=document.getElementById('tf-desc').value.trim();
+  let valid=true;
+  ['tf-title-err','tf-desc-err'].forEach(id=>document.getElementById(id).classList.remove('visible'));
+  ['tf-title','tf-desc'].forEach(id=>document.getElementById(id).classList.remove('error'));
+  if(title.length<3){document.getElementById('tf-title-err').classList.add('visible');document.getElementById('tf-title').classList.add('error');valid=false;}
+  if(description.length<3){document.getElementById('tf-desc-err').classList.add('visible');document.getElementById('tf-desc').classList.add('error');valid=false;}
+  if(!valid)return;
+  const status=document.getElementById('tf-status').value;
+  const deadline=document.getElementById('tf-deadline').value||null;
   const tasks=getTasks(currentUser.id);
+  const now=new Date().toISOString();
   if(editingTaskId){
     const idx=tasks.findIndex(t=>t.id===editingTaskId);
-    if(idx!==-1){tasks[idx].title=title;tasks[idx].description=document.getElementById('tf-desc').value.trim();tasks[idx].status=document.getElementById('tf-status').value;}
+    if(idx!==-1){tasks[idx].title=title;tasks[idx].description=description;tasks[idx].status=status;tasks[idx].deadline=deadline;tasks[idx].updatedAt=now;}
     showToast(lang==='de'?'Aufgabe aktualisiert':'Task updated');
   }else{
-    tasks.unshift({id:currentUser.id+'_'+Date.now(),title,description:document.getElementById('tf-desc').value.trim(),status:document.getElementById('tf-status').value,createdAt:new Date().toISOString(),comments:[]});
+    tasks.unshift({id:currentUser.id+'_'+Date.now(),title,description,status,deadline,createdAt:now,updatedAt:now,comments:[]});
     showToast(lang==='de'?'Aufgabe erstellt':'Task created','success');
   }
   saveTasks(currentUser.id,tasks);closeModal('modal-task-form');renderTasks();
@@ -630,7 +699,10 @@ function renderDetail(){
   document.getElementById('detail-title').textContent=t.title;
   document.getElementById('detail-status').value=t.status;
   document.getElementById('detail-desc').textContent=t.description||(lang==='de'?'Keine Beschreibung.':'No description provided.');
-  document.getElementById('detail-date').textContent=new Date(t.createdAt).toLocaleDateString(lang==='de'?'de-DE':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const locale=lang==='de'?'de-DE':'en-GB';
+  document.getElementById('detail-date').textContent=(lang==='de'?'Erstellt ':'Created ')+new Date(t.createdAt).toLocaleDateString(locale,{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('detail-updated').textContent=(lang==='de'?'Zuletzt geändert ':'Last modified ')+new Date(t.updatedAt||t.createdAt).toLocaleDateString(locale,{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('detail-deadline').textContent=t.deadline?(lang==='de'?'Frist ':'Deadline ')+new Date(t.deadline).toLocaleDateString(locale,{day:'numeric',month:'long',year:'numeric'}):'';
   renderComments(t);
 }
 
@@ -654,7 +726,8 @@ function renderComments(t){
 function updateDetailStatus(){
   const tasks=getTasks(currentUser.id);const t=tasks.find(t=>t.id===detailTaskId);if(!t)return;
   t.status=document.getElementById('detail-status').value;
-  saveTasks(currentUser.id,tasks);renderTasks();
+  t.updatedAt=new Date().toISOString();
+  saveTasks(currentUser.id,tasks);renderTasks();renderDetail();
 }
 
 function addComment(){
